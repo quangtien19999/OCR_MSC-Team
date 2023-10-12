@@ -5,3 +5,4 @@ private_test/*
 run
 visualize
 weights/*
+prediction.csv
