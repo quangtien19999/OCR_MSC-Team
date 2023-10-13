@@ -21,3 +21,5 @@ Tập ảnh private test copy vào thư mục private_test.
 ```
 
 Sau khi chạy xong, kết quả ảnh được lưu ở folder visualize và thông tin bbounding box được lưu dưới file .csv.
+
+Dữ liệu train custom (row, col, span) có thể tải tại [đây](https://drive.google.com/drive/folders/1bIIyck7Bk6fGDkmy5tNxew9XPPvJw6s3?usp=sharing).
