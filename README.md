@@ -14,7 +14,7 @@ pip install -r requirements.txt  # install
 ## Run
 Download file weight tại [đây](https://drive.google.com/drive/folders/1t9e_Bet6D1CTga_yj7I5WCiiV7w4TOYI?usp=sharing) và copy vào thư mực weights.
 Tập ảnh private test copy vào thư mục private_test.
-Để chay, dùng lênh:
+Để chạy, dùng lênh:
 
 ```bash
 ./run_all.sh
