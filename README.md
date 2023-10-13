@@ -8,13 +8,13 @@ Code này được chạy trên Python 3.9.17 Anaconda
 ```bash
 git clone https://github.com/quangtien19999/OCR_MSC-Team.git
 cd OCR_MSC-Team
-pip install -r pip install -r requirements.txt  # install
+pip install -r requirements.txt  # install
 ```
 
 ## Run
 Download file weight tại [đây](https://drive.google.com/drive/folders/1t9e_Bet6D1CTga_yj7I5WCiiV7w4TOYI?usp=sharing) và copy vào thư mực weights.
 Tập ảnh private test copy vào thư mục private_test.
-Để chay, dùng lênh:
+Để chạy, dùng lênh:
 
 ```bash
 ./run_all.sh
