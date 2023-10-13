@@ -8,7 +8,7 @@ Code này được chạy trên Python 3.9.17 Anaconda
 ```bash
 git clone https://github.com/quangtien19999/OCR_MSC-Team.git
 cd OCR_MSC-Team
-pip install -r pip install -r requirements.txt  # install
+pip install -r requirements.txt  # install
 ```
 
 ## Run
