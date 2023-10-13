@@ -217,8 +217,7 @@ def check_merge_span_detect(origin_span_info, merge_span_detect_txt_path, cell_r
         xmin, ymin, xmax, ymax, start_row, end_row, start_col, end_col = [int(x) for x in line.split(' ')]
         iou = calculate_iou([xmin, ymin, xmax, ymax], [o_xmin, o_ymin, o_xmax, o_ymax])
         flag = ((ymax - ymin) * (xmax - xmin)) < ((o_ymax - o_ymin) * (o_xmax - o_xmin))
-        # print(iou, flag, start_row, end_row, start_col, end_col)
-        # print([xmin, ymin, xmax, ymax], [o_xmin, o_ymin, o_xmax, o_ymax])
+
         if iou < 0.1 or flag:
             continue
         span_valid_flag = True
@@ -232,7 +231,6 @@ def find_additional_merge_span_detect(detected_span, merge_span_detect_txt_path,
     merge_span_detect_data = open(merge_span_detect_txt_path, 'r').read().splitlines() 
     merge_span_detect_data = [line for line in merge_span_detect_data if line.strip() != ""]
     if len(merge_span_detect_data) == 0:
-        # print('EMPTY')
         return None, None 
     
     additional_merge_span = [] 
@@ -242,7 +240,6 @@ def find_additional_merge_span_detect(detected_span, merge_span_detect_txt_path,
         used_flag = True
         for origin_span_info in detected_span:
             o_xmin, o_ymin, o_xmax, o_ymax = origin_span_info[0]
-            o_start_row, o_end_row, o_start_col, o_end_col = origin_span_info[1]
             iou = calculate_iou([xmin, ymin, xmax, ymax], [o_xmin, o_ymin, o_xmax, o_ymax])
             if iou > 0.1: 
                 used_flag = False 
@@ -290,14 +287,9 @@ def res_converter(data_path):
                 elif class_id == 1:
                     col.extend([int(x_min), int(x_max)])
                 else:
-                    # if score < 0.3:
-                    #     continue
-                    # print([int(x_min), int(y_min), int(x_max), int(y_max)])
                     span.append([int(x_min), int(y_min), int(x_max), int(y_max)])
 
         # Sort row and col for correct table idx
-        # row.sort()
-        # col.sort()
         temp_sort = [] 
         for i in range(0, len(row), 2):
             temp_sort.extend([(row[i] + row[i+1]) / 2, (row[i] + row[i+1]) / 2 + 1])
@@ -329,8 +321,6 @@ def res_converter(data_path):
             span_poss = []
             cell_rm_id = []
             for s in span:
-                # print(s)
-
                 span_pos = []
                 s_x_min, s_y_min, s_x_max, s_y_max = s
                 flag_inter_span = True
@@ -354,12 +344,7 @@ def res_converter(data_path):
 
                     inter_span = inter_area / (span_area + 1e-7)
                     inter_cel = inter_area / (cel_area + 1e-7)
-
-                    # print(inter_span, inter_cel, cel_x_min, cel_y_min, cel_x_max, cel_y_max)
-
-                    # if cel[1][0] == 13:
-                    #     print("INTER CEL: ", inter_cel)
-                    
+                  
                     if inter_span > 0.6:
                         # break
                         flag_inter_span = False
@@ -371,8 +356,6 @@ def res_converter(data_path):
                         span_pos.append(cel[1])
                         if i not in cell_rm_id_temp:
                             cell_rm_id_temp.append(i)
-                        # else:
-                        #     continue
 
                 if len(span_pos) == 0:
                     print('SPAN POS 0')
@@ -383,9 +366,6 @@ def res_converter(data_path):
 
                     continue
                     
-
-                
-                # print("SPAN POS: ", span_pos)
                 span_pos = np.array(span_pos)
                 span_st_r = np.min(span_pos[:,0])
                 span_e_r = np.max(span_pos[:,0])
@@ -412,13 +392,12 @@ def res_converter(data_path):
                     results.append(res)
                     img = cv2.rectangle(img, (sp[0][0], sp[0][1]), (sp[0][2], sp[0][3]), (0,255,0), 3)
                     img = cv2.putText(img, f'{sp[1][0]}, {sp[1][1]}, {sp[1][2]}, {sp[1][3]}', (sp[0][0], sp[0][3]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
-                    # img = cv2.putText(img, f'span', (sp[0][0], sp[0][3]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
-
+                    
                 else:
                     temp_start_col = sp[1][2]
                     for id in need_split_col_index_list: 
                         left_span_cell = [f"{file.split('.')[0]}", f"{col[temp_start_col*2]} {sp[0][1]} {col[id*2+1]} {sp[0][3]} {sp[1][0]} {sp[1][1]} {temp_start_col} {id}"]
-                        # res = [f"{file.split('.')[0]}", f"{sp[0][0]} {sp[0][1]} {sp[0][2]} {sp[0][3]} {sp[1][0]} {sp[1][1]} {sp[1][2]} {sp[1][3]}"]
+                       
                         results.append(left_span_cell)
                         img = cv2.rectangle(img, (col[temp_start_col*2], sp[0][1]), (col[id*2+1], sp[0][3]), (0,255,0), 3)
                         img = cv2.putText(img, f'{sp[1][0]}, {sp[1][1]}, {temp_start_col}, {id}', (col[temp_start_col*2], sp[0][3]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
@@ -428,8 +407,7 @@ def res_converter(data_path):
                     
                     id = sp[1][3]
                     last_left_span_cell = [f"{file.split('.')[0]}", f"{col[temp_start_col*2]} {sp[0][1]} {col[id*2+1]} {sp[0][3]} {sp[1][0]} {sp[1][1]} {temp_start_col} {id}"]
-                    # temp_start_col = id+1
-                    # res = [f"{file.split('.')[0]}", f"{sp[0][0]} {sp[0][1]} {sp[0][2]} {sp[0][3]} {sp[1][0]} {sp[1][1]} {sp[1][2]} {sp[1][3]}"]
+                 
                     results.append(last_left_span_cell)
 
                     img = cv2.rectangle(img, (col[temp_start_col*2], sp[0][1]), (col[id*2+1], sp[0][3]), (0,255,0), 3)
@@ -442,7 +420,6 @@ def res_converter(data_path):
         else:
             sel_cell = cell
 
-        # print(len(sel_cell))
         for sc in sel_cell:
             res = [f"{file.split('.')[0]}", f"{sc[0][0]} {sc[0][1]} {sc[0][2]} {sc[0][3]} {sc[1][0]} {sc[1][0]} {sc[1][1]} {sc[1][1]}"]
             results.append(res)
